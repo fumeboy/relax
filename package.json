@@ -2,10 +2,10 @@
   "name": "relax",
   "version": "0.0.5",
   "description": "relax",
-  "main": "build/dist/index.html",
+  "main": "public/index.html",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --config webpack.config.dev.js",
-    "build": "cross-env NODE_ENV=production node webpack --config webpack.config.prod.js"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js"
   },
   "devDependencies": {
     "@types/node": "^10.14.9",

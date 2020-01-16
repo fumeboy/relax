@@ -1,17 +1,12 @@
 const path = require('path')
-
+const htmlWebpackPlugin = require('html-webpack-plugin')
 const ifProduction = () => process.env.NODE_ENV === 'production'
 
 module.exports = {
-    entry: {
-        relax: path.join(__dirname, './src/example/dom_example.ts')
-    },
+    entry: './src/example/index.ts',
     output: {
         path: path.join(__dirname, './build/dist'),
-        filename: '[name].js',
-        libraryExport: 'default',
-        libraryTarget: ifProduction ? 'umd' : undefined,
-        publicPath: '/build/dist/'
+        filename: '[name].js'
     },
     module: {
         rules: [
@@ -33,5 +28,14 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js']
-    }
+    },
+    plugins: [
+        new htmlWebpackPlugin({
+            // 创建一个在内存中生成 HTML 页面的插件
+            // 指定 模板页面，将来会根据指定的页面路径，去生成内存中的页面
+            template: path.join(__dirname, './public/index.html'),
+            // 指定生成的页面的名称
+            filename: 'index.html'
+        })
+    ]
 }

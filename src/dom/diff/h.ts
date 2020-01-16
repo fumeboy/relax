@@ -1,4 +1,4 @@
-import { v, vchild } from '../node'
+import { vnode } from '../node'
 
 export const nodePatchTypes = {
     CREATE: 0,
@@ -26,7 +26,6 @@ export interface patchD {
 
 export interface patchB {
     type: 0 | 1 | 2 | 3
-    isStr: boolean
     elem: vchild
 }
 

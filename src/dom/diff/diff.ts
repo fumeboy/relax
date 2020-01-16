@@ -1,55 +1,35 @@
 import { nodePatchTypes, patchA, patchB, patchC, patchD, propPatchTypes } from './h'
-import { v, v_text, vchild } from '../node'
+import { vnode } from '../node'
+import { vtext } from '../text'
 
 export function diff(old: vchild, new_: vchild): patchB | patchC {
     // 新建 node
-    if (old == undefined) {
+    if (!old) {
         return <patchB>{
             type: nodePatchTypes.CREATE,
             elem: new_
         }
     }
-
     // 删除 node
-    if (new_ == undefined) {
+    if (!new_) {
         return <patchB>{
             type: nodePatchTypes.REMOVE
         }
     }
-    if (!(old.type || new_.type) && (<v>old).tag === (<v>new_).tag) {
-        // v v :           (F || F)
-        // v string :      (F || T)
-        // string string : (T || T)
-        // 更新 node
-        // 比较 attrs 的变化
-        const attrDiff = diffAttr(<v>old, <v>new_)
-        const eventDiff = diffEvents(<v>old, <v>new_)
-        // 比较 children 的变化
-        const childrenDiff = diffChildren(<v>old, <v>new_)
-        // 如果 attr 或者 children 有变化，才需要更新
-        if (attrDiff.length > 0 || eventDiff.length > 0 || childrenDiff.some((patchObj) => patchObj !== undefined)) {
-            return <patchC>{
-                type: nodePatchTypes.UPDATE,
-                event: eventDiff,
-                attr: attrDiff,
-                children: childrenDiff
-            }
-        } else return
-    }
 
-    // 替换 node
-    // 只有 string === string 可能发生
-    if (old.type && new_.type && (<v_text>old).text === (<v_text>new_).text) {
-        return
-    }
-    return <patchB>{
-        type: nodePatchTypes.REPLACE,
-        elem: new_
-    }
+    if (old.type === 2) old = (<Element>old).v
+    if (new_.type === 2) new_ = (<Element>new_).v
+    if (old.type !== new_.type)
+        return <patchB>{
+            type: nodePatchTypes.REPLACE,
+            elem: new_
+        }
+    if (old.type === 1) return compare_v_text(<vtext>old, <vtext>new_)
+    return compare_v(<vnode>old, <vnode>new_)
 }
 
 // 比较 attr 的变化
-function diffAttr(old: v, new_: v): patchA[] {
+function diffAttr(old: vnode, new_: vnode): patchA[] {
     const patches: patchA[] = []
     const allAttr = { ...old.attrs, ...new_.attrs }
     // 获取新旧所有属性名后，再逐一判断新旧属性值
@@ -76,8 +56,36 @@ function diffAttr(old: v, new_: v): patchA[] {
     return patches
 }
 
+function compare_v_text(old: vtext, new_: vtext) {
+    if (old.text === new_.text) return
+    return <patchB>{
+        type: nodePatchTypes.REPLACE,
+        elem: new_
+    }
+}
+function compare_v(old: vnode, new_: vnode) {
+    if (old.tag !== new_.tag)
+        return <patchB>{
+            type: nodePatchTypes.REPLACE,
+            elem: new_
+        }
+    const attrDiff = diffAttr(old, new_)
+    const eventDiff = diffEvents(old, new_)
+    // 比较 children 的变化
+    const childrenDiff = diffChildren(old, new_)
+    // 如果 attr 或者 children 有变化，才需要更新
+    if (attrDiff.length > 0 || eventDiff.length > 0 || childrenDiff.some((patchObj) => patchObj !== undefined)) {
+        return <patchC>{
+            type: nodePatchTypes.UPDATE,
+            event: eventDiff,
+            attr: attrDiff,
+            children: childrenDiff
+        }
+    } else return
+}
+
 // 比较 events 的变化
-function diffEvents(old: v, new_: v): patchD[] {
+function diffEvents(old: vnode, new_: vnode): patchD[] {
     const patches: patchD[] = []
     const allEvents = { ...old.events, ...new_.events }
     // 获取新旧所有事件名后，再逐一判断新旧值
@@ -89,7 +97,7 @@ function diffEvents(old: v, new_: v): patchD[] {
             patches.push(<patchA>{
                 type: propPatchTypes.REMOVE,
                 key,
-                value: null
+                value: oldValue
             })
         }
         // 更新事件
@@ -97,7 +105,7 @@ function diffEvents(old: v, new_: v): patchD[] {
             patches.push(<patchA>{
                 type: propPatchTypes.UPDATE,
                 key,
-                value: newValue
+                value: [oldValue, newValue]
             })
         }
     })
@@ -105,7 +113,7 @@ function diffEvents(old: v, new_: v): patchD[] {
 }
 
 // 比较 children 的变化
-function diffChildren(old: v, new_: v): patchB[] {
+function diffChildren(old: vnode, new_: vnode): patchB[] {
     // 可优化点
     const patches = []
     // 获取子元素最大长度

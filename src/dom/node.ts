@@ -1,64 +1,45 @@
-export type vchild = v | v_text
+import './elem'
+import { vtext } from './text'
 
-export class v {
-    readonly type: number
+export class vnode {
+    readonly type: number = 0
     tag: string
     events: events
     attrs: IAttr
     children: vchild[]
-    elem: Element
-    a(attrs: IAttr): v {
+    a(attrs: IAttr): vnode {
         this.attrs = attrs
         return this
     }
-    on(events: events): v {
+    on(events: events): vnode {
         this.events = events
         return this
     }
-    c(...children: (v | string | v_text)[]): v {
+    c(...children: (vnode | string | vtext | Element)[]): vnode {
         for (let x in children) {
-            if (typeof children[x] === 'string') children[x] = new v_text(<string>children[x])
+            if (typeof children[x] === 'string') children[x] = new vtext(<string>children[x])
         }
         this.children = <vchild[]>children
         return this
     }
-    live(parent: Element): v {
-        let e = this.render()
-        parent.appendChild(e)
-        return this
-    }
     render(): Element {
-        let ret = document.createElement(this.tag)
+        let ret = document.createElement(this.tag) as Element
+        ret.v = this
+        ret.type = 2
         for (let x in this.attrs) {
             ret.setAttribute(x, this.attrs[x])
         }
         for (let x in this.events) {
             ret.addEventListener(x, this.events[x])
         }
-        for (let x in this.children) {
-            ret.appendChild(this.children[x].render())
+        for (let i = 0, len = this.children.length; i < len; i++) {
+            ret.appendChild(this.children[i].render())
         }
-        this.elem = ret
         return ret
     }
     constructor(tagName?: string) {
         if (!tagName) tagName = 'div'
         this.tag = tagName
-        this.type = 0
-    }
-}
-
-export class v_text {
-    text: string
-    elem: Element
-    readonly type: number
-    constructor(t: string) {
-        this.text = t
-        this.type = 1
-    }
-    render(): Element {
-        let ret = (document.createTextNode(this.text) as any) as Element
-        this.elem = ret
-        return ret
+        this.children = []
     }
 }

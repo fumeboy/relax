@@ -1,3 +1,5 @@
+type vchild = vnode | vtext | Element
+
 type events = {
     [k in keyof HTMLElementEventMap]?: EventListenerOrEventListenerObject
 }
@@ -5,14 +7,29 @@ type events = {
 type IAttr = {
     [key: string]: string
 }
-// interface Element {
-//     store: {
-//         // 添加了存储单元，也不知道有没有副作用
-//         attrs: IAttr
-//         events: events
-//     }
-//     a(attr: IAttr): Element
-//     on(events: events): Element
-//     c(...children: (Element | string)[]): Element
-//     del()
-// }
+
+declare class vtext {
+    text: string
+    readonly type: number
+    render(): Element
+}
+
+declare class vnode {
+    readonly type: number
+    tag: string
+    events: events
+    attrs: IAttr
+    children: vchild[]
+    render(): Element
+    c(...children: (vnode | string | vtext)[]): vnode
+    on(events: events): vnode
+    a(attrs: IAttr): vnode
+}
+
+interface Element {
+    type: number
+    v: vnode
+    setV(v: vnode)
+    update(e: vchild)
+    render(): Element
+}

@@ -1,5 +1,4 @@
 import { nodePatchTypes, patchA, patchB, patchC, patchD, propPatchTypes } from './h'
-import { e } from '../../../build/tsc_build/dom/elem'
 
 function updateAttr(element: Element, attr: patchA[]) {
     if (!attr) {

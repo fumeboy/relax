@@ -1,5 +1,3 @@
-import { vnode } from '../node'
-
 export const nodePatchTypes = {
     CREATE: 0,
     REMOVE: 1,

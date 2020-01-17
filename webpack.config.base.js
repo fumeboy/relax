@@ -3,7 +3,10 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const ifProduction = () => process.env.NODE_ENV === 'production'
 
 module.exports = {
-    entry: './src/example/index.ts',
+    entry: {
+        index: './src/example/index.ts',
+        page2: './src/example/page2.ts'
+    },
     output: {
         path: path.join(__dirname, './build/dist'),
         filename: '[name].js'
@@ -26,16 +29,28 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                default: {
+                    name: 'common',
+                    chunks: 'initial'
+                    // minChunks: 2 //模块被引用2次以上的才抽离
+                }
+            }
+        }
+    },
     resolve: {
         extensions: ['.ts', '.js']
     },
     plugins: [
         new htmlWebpackPlugin({
-            // 创建一个在内存中生成 HTML 页面的插件
-            // 指定 模板页面，将来会根据指定的页面路径，去生成内存中的页面
             template: path.join(__dirname, './public/index.html'),
-            // 指定生成的页面的名称
             filename: 'index.html'
+        }),
+        new htmlWebpackPlugin({
+            template: path.join(__dirname, './public/index.html'),
+            filename: 'page2.html'
         })
     ]
 }

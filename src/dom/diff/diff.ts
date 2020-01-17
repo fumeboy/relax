@@ -28,6 +28,33 @@ export function diff(old: vchild, new_: vchild): patchB | patchC {
     return compare_v(<vnode>old, <vnode>new_)
 }
 
+function compare_v_text(old: vtext, new_: vtext) {
+    if (old.text === new_.text) return
+    return <patchB>{
+        type: nodePatchTypes.REPLACE,
+        elem: new_
+    }
+}
+function compare_v(old: vnode, new_: vnode) {
+    if (old.tag !== new_.tag)
+        return <patchB>{
+            type: nodePatchTypes.REPLACE,
+            elem: new_
+        }
+    const attrDiff = diffAttr(old, new_)
+    const eventDiff = diffEvents(old, new_)
+    const childrenDiff = diffChildren(old, new_)
+    // 如果 attr， event 或者 children 有变化，才需要更新
+    if (attrDiff.length > 0 || eventDiff.length > 0 || childrenDiff.some((patchObj) => patchObj !== undefined)) {
+        return <patchC>{
+            type: nodePatchTypes.UPDATE,
+            event: eventDiff,
+            attr: attrDiff,
+            children: childrenDiff
+        }
+    } else return
+}
+
 // 比较 attr 的变化
 function diffAttr(old: vnode, new_: vnode): patchA[] {
     const patches: patchA[] = []
@@ -54,34 +81,6 @@ function diffAttr(old: vnode, new_: vnode): patchA[] {
         }
     })
     return patches
-}
-
-function compare_v_text(old: vtext, new_: vtext) {
-    if (old.text === new_.text) return
-    return <patchB>{
-        type: nodePatchTypes.REPLACE,
-        elem: new_
-    }
-}
-function compare_v(old: vnode, new_: vnode) {
-    if (old.tag !== new_.tag)
-        return <patchB>{
-            type: nodePatchTypes.REPLACE,
-            elem: new_
-        }
-    const attrDiff = diffAttr(old, new_)
-    const eventDiff = diffEvents(old, new_)
-    // 比较 children 的变化
-    const childrenDiff = diffChildren(old, new_)
-    // 如果 attr 或者 children 有变化，才需要更新
-    if (attrDiff.length > 0 || eventDiff.length > 0 || childrenDiff.some((patchObj) => patchObj !== undefined)) {
-        return <patchC>{
-            type: nodePatchTypes.UPDATE,
-            event: eventDiff,
-            attr: attrDiff,
-            children: childrenDiff
-        }
-    } else return
 }
 
 // 比较 events 的变化

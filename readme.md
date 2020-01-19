@@ -30,3 +30,11 @@
    比如： 页面 1 初始化时需要悬挂 10 个 child 节点到 root 节点 （ for 10 :root <- child），如果这个过程无论哪个客户端看到都是同样的结果，那便可以直接“预处理”为 root = child, child ...
    
    （预处理是可以手动进行的。
+   
+   
+   
+---
+
+预处理的打算还是放弃好了……
+
+这个框架已经打包放在了 https://www.npmjs.com/package/@fumeboy/relax

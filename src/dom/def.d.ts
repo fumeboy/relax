@@ -16,7 +16,7 @@ declare class vtext {
 
 declare class vnode {
     readonly vtype: number
-    tag: string
+    readonly tag: string
     events: events
     attrs: IAttr
     children: vchild[]
@@ -29,7 +29,6 @@ declare class vnode {
 interface Element {
     vtype: number
     v: vnode
-    setV(v: vnode)
     update(e: vchild)
     render(): Element
 }

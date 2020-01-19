@@ -1,6 +1,6 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const SimpleWebpackHTMLEntrypoint = require('./@bin/SimpleWebpackHTMLEntrypoint')
+const SimpleWebpackHTMLEntrypoint = require('simple-webpack-html-entrypoint')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ifProduction = () => process.env.NODE_ENV === 'production'
 

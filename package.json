@@ -1,8 +1,8 @@
 {
-  "name": "relax",
+  "name": "@fumeboy/relax",
   "version": "0.0.5",
   "description": "relax",
-  "main": "public/index.html",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js"
@@ -26,10 +26,24 @@
     "ts-jest": "^24.0.2",
     "ts-loader": "^5.4.5",
     "typescript": "^3.5.2",
-    "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.34.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.4",
-    "webpack-dev-server": "^3.7.1"
-  }
+    "webpack-dev-server": "^3.7.1",
+    "simple-webpack-html-entrypoint": "^1.0.1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fumeboy/relax.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fumeboy/relax/issues"
+  },
+  "homepage": "https://github.com/fumeboy/relax#readme"
 }

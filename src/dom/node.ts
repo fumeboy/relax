@@ -3,7 +3,7 @@ import { vtext } from './text'
 
 export class vnode {
     readonly vtype: number = 0
-    tag: string
+    readonly tag: string
     events: events
     attrs: IAttr
     children: vchild[]

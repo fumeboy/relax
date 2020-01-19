@@ -1,6 +1,7 @@
 // data
 
 import { vnode } from '../../../dom/node'
+import style from './style.sass'
 
 interface ITodoItem {
     content: string
@@ -22,7 +23,7 @@ try {
 // data
 
 function renderList(list = todoList) {
-    let ret = new vnode('ul')
+    let ret = new vnode('ul').a({ class: style.ul })
     let children = []
     for (let x in list) {
         children.push(new vnode('li').c(list[x].content))

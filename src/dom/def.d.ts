@@ -10,12 +10,12 @@ type IAttr = {
 
 declare class vtext {
     text: string
-    readonly type: number
+    readonly vtype: number
     render(): Element
 }
 
 declare class vnode {
-    readonly type: number
+    readonly vtype: number
     tag: string
     events: events
     attrs: IAttr
@@ -27,7 +27,7 @@ declare class vnode {
 }
 
 interface Element {
-    type: number
+    vtype: number
     v: vnode
     setV(v: vnode)
     update(e: vchild)

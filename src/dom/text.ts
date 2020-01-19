@@ -1,6 +1,6 @@
 export class vtext {
     text: string
-    readonly type: number = 1
+    readonly vtype: number = 1
     constructor(t: string) {
         this.text = t
     }

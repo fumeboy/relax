@@ -2,7 +2,7 @@ import './elem'
 import { vtext } from './text'
 
 export class vnode {
-    readonly type: number = 0
+    readonly vtype: number = 0
     tag: string
     events: events
     attrs: IAttr
@@ -25,7 +25,7 @@ export class vnode {
     render(): Element {
         let ret = document.createElement(this.tag) as Element
         ret.v = this
-        ret.type = 2
+        ret.vtype = 2
         for (let x in this.attrs) {
             ret.setAttribute(x, this.attrs[x])
         }

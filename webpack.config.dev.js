@@ -5,7 +5,7 @@ const path = require('path')
 module.exports = Object.assign(webpackConfig, {
     mode: 'development',
     devtool: 'inline-source-map',
-    plugins: [new webpack.NamedModulesPlugin(), new webpack.HotModuleReplacementPlugin()],
+    // plugins: [new webpack.HotModuleReplacementPlugin()],
     devServer: {
         open: true,
         // publicPath: 'public',

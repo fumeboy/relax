@@ -1,11 +1,14 @@
 const path = require('path')
-const htmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const SimpleWebpackHTMLEntrypoint = require('./@bin/SimpleWebpackHTMLEntrypoint')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ifProduction = () => process.env.NODE_ENV === 'production'
 
 module.exports = {
     entry: {
         index: './src/example/index.ts',
-        page2: './src/example/page2.ts'
+        page2: './src/example/page2.ts',
+        page3: './src/example/page3.ts'
     },
     output: {
         path: path.join(__dirname, './build/dist'),
@@ -14,8 +17,26 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                test: /\.sass$/,
+                use: [
+                    // ifProduction() ? MiniCssExtractPlugin.loader : 'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            modules: true,
+                            localIdentName: '[name]__[local]___[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            modules: true,
+                            localIdentName: '[name]_[local]_[hash:base64:5]'
+                        }
+                    }
+                ]
             },
             {
                 test: /\.ts$/,
@@ -34,8 +55,15 @@ module.exports = {
             cacheGroups: {
                 default: {
                     name: 'common',
-                    chunks: 'initial'
-                    // minChunks: 2 //模块被引用2次以上的才抽离
+                    chunks: 'all',
+                    minSize: 0,
+                    minChunks: 2 //模块被引用2次以上的才抽离
+                },
+                vdom: {
+                    name: 'vdom',
+                    test: /[\\/]src[\\/]dom[\\/]/,
+                    chunks: 'all',
+                    priority: 2
                 }
             }
         }
@@ -44,13 +72,17 @@ module.exports = {
         extensions: ['.ts', '.js']
     },
     plugins: [
-        new htmlWebpackPlugin({
-            template: path.join(__dirname, './public/index.html'),
-            filename: 'index.html'
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css'
         }),
-        new htmlWebpackPlugin({
-            template: path.join(__dirname, './public/index.html'),
-            filename: 'page2.html'
+        new BundleAnalyzerPlugin({
+            openAnalyzer: false,
+            analyzerMode: 'static',
+            reportFilename: 'bundle-analyzer-report.html'
+        }),
+        new SimpleWebpackHTMLEntrypoint({
+            template: path.join(__dirname, './public/index.html')
         })
     ]
 }

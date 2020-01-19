@@ -17,14 +17,14 @@ export function diff(old: vchild, new_: vchild): patchB | patchC {
         }
     }
 
-    if (old.type === 2) old = (<Element>old).v
-    if (new_.type === 2) new_ = (<Element>new_).v
-    if (old.type !== new_.type)
+    if (old.vtype === 2) old = (<Element>old).v
+    if (new_.vtype === 2) new_ = (<Element>new_).v
+    if (old.vtype !== new_.vtype)
         return <patchB>{
             type: nodePatchTypes.REPLACE,
             elem: new_
         }
-    if (old.type === 1) return compare_v_text(<vtext>old, <vtext>new_)
+    if (old.vtype === 1) return compare_v_text(<vtext>old, <vtext>new_)
     return compare_v(<vnode>old, <vnode>new_)
 }
 

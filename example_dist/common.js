@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{2:function(n,e,o){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var t=o(0);e.default=function(){var n=0,e=void 0,o=function(){n+=1,e.update(u())},u=function(){return new t.vnode("button").c(n+"").on({click:o})};return e=u().render()}}}]);

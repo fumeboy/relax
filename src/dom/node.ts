@@ -1,6 +1,16 @@
 import './elem'
 import { vtext } from './text'
 
+type vchild = vnode | vtext | Element
+
+type events = {
+    [k in keyof HTMLElementEventMap]?: EventListenerOrEventListenerObject
+}
+
+type IAttr = {
+    [key: string]: string
+}
+
 export class vnode {
     readonly vtype: number = 0
     readonly tag: string

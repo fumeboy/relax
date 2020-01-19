@@ -2,7 +2,7 @@
   "name": "@fumeboy/relax",
   "version": "0.0.7",
   "description": "relax",
-  "main": "build/relax.js",
+  "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
     "prepublish": "npm run build",

@@ -4,9 +4,6 @@
 
 依赖 nodejs 运行，启动口令见 package.json
 
-（ 因为 dev 口令执行的程序需要 /build 文件夹，所以你可以先使用 build 口令来产生 /build
-
-
 2020 / 1 / 17 :
 
 抄完了 vdom 这一部分，也不知道该从 react / vue 抄什么了。

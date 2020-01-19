@@ -8,7 +8,7 @@ module.exports = {
     devtool: 'inline-source-map',
     devServer: {
         open: true,
-        contentBase: path.join(__dirname, 'build/dist'), // boolean | string | array, static file location
+        contentBase: path.join(__dirname, 'example_dist'), // boolean | string | array, static file location
         compress: true, // enable gzip compression
         historyApiFallback: true, // true for index.html upon 404, object for multiple paths
         hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
@@ -21,7 +21,7 @@ module.exports = {
         page3: './src/example/page3.ts'
     },
     output: {
-        path: path.join(__dirname, './build/dist'),
+        path: path.join(__dirname, './example_dist'),
         filename: '[name].js'
     },
     module: {

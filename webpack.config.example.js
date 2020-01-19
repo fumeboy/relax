@@ -2,9 +2,19 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const SimpleWebpackHTMLEntrypoint = require('simple-webpack-html-entrypoint')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const ifProduction = () => process.env.NODE_ENV === 'production'
 
 module.exports = {
+    mode: 'development',
+    devtool: 'inline-source-map',
+    devServer: {
+        open: true,
+        contentBase: path.join(__dirname, 'build/dist'), // boolean | string | array, static file location
+        compress: true, // enable gzip compression
+        historyApiFallback: true, // true for index.html upon 404, object for multiple paths
+        hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
+        https: false, // true for self-signed, object for cert authority
+        noInfo: true // only errors & warns on hot reload
+    },
     entry: {
         index: './src/example/index.ts',
         page2: './src/example/page2.ts',

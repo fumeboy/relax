@@ -1,11 +1,13 @@
 {
   "name": "@fumeboy/relax",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "relax",
-  "main": "src/index.ts",
+  "main": "build/tsc_build/index.js",
+  "types": "build/tsc_build/index.d.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js"
+    "prepublish": "npm run build",
+    "example": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.example.js",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/node": "^10.14.9",
